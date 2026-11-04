@@ -1,0 +1,33 @@
+services:
+  db_mysql:
+    image: mysql:8.0
+    container_name: container_db_mysql_init_sql_robuste
+    environment:
+      MYSQL_ROOT_PASSWORD: root_password_secure
+      MYSQL_DATABASE: batterie
+      MYSQL_USER: dbuser_mysql
+      MYSQL_PASSWORD: motdepasse
+    volumes:
+      - ./init_sql:/docker-entrypoint-initdb.d:ro
+      - mysqldata:/var/lib/mysql
+    ports:
+      - "3308:3306"   # 3308 côté hôte pour éviter le conflit avec un MySQL local
+    restart: no
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u root -proot_password_secure"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  adminer:
+    image: adminer:latest
+    container_name: container_adminer
+    restart: no
+    ports:
+      - "8082:8080"
+    depends_on:
+      db_mysql:
+        condition: service_healthy
+
+volumes:
+  mysqldata:
