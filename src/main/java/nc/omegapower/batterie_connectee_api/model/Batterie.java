@@ -18,8 +18,8 @@ public class Batterie {
     @NotNull
     @Min(0)
     @Max(100)
-    @Column(name = "etat_charge")
-    private Integer etatCharge;
+    @Column(name = "soc")
+    private Integer soc;
 
     @NotNull
     private Float tension;
@@ -38,9 +38,9 @@ public class Batterie {
 
     public Batterie() {}
 
-    public Batterie(Integer etatCharge, Float tension, Float courant,
+    public Batterie(Integer soc, Float tension, Float courant,
                     Float temperature, Boolean alarme, LocalDateTime dateMesure) {
-        this.etatCharge = etatCharge;
+        this.soc = soc;
         this.tension = tension;
         this.courant = courant;
         this.temperature = temperature;
@@ -50,7 +50,7 @@ public class Batterie {
 
     // GETTERS
     public Long getId() { return id; }
-    public Integer getEtatCharge() { return etatCharge; }
+    public Integer getSoc() { return soc; }
     public Float getTension() { return tension; }
     public Float getCourant() { return courant; }
     public Float getTemperature() { return temperature; }
@@ -59,7 +59,7 @@ public class Batterie {
 
     // SETTERS
     public void setId(Long id) { this.id = id; }
-    public void setEtatCharge(Integer etatCharge) { this.etatCharge = etatCharge; }
+    public void setSoc(Integer soc) { this.soc = soc; }
     public void setTension(Float tension) { this.tension = tension; }
     public void setCourant(Float courant) { this.courant = courant; }
     public void setTemperature(Float temperature) { this.temperature = temperature; }

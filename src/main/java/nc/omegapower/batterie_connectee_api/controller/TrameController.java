@@ -31,7 +31,7 @@ public class TrameController {
 
         // 2. Construire l'objet Batterie pour la base de données
         Batterie batterie = new Batterie();
-        batterie.setEtatCharge(decodee.soc);
+        batterie.setSoc(decodee.soc);
         batterie.setTension(decodee.tension);
         batterie.setCourant(decodee.courant);
         batterie.setTemperature(decodee.temperature);
