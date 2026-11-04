@@ -21,13 +21,13 @@ public class TrameController {
 
     /**
      * Reçoit une trame binaire de la carte en 4G (ER2).
-     * Ex de body JSON : { "octets": [132, 164, 144, 0, 87, 0, 0, 0, 0, 1] }
+     * Ex de body JSON : { "octets": [132, 164, 144, 0, 87] }
      */
     @PostMapping
     public ResponseEntity<Batterie> recevoirTrame(@Valid @RequestBody TrameDto trameDto) {
 
         // 1. Décoder la trame binaire
-        Decodeur.MesureDecodee decodee = Decodeur.decoder(trameDto.octets());
+        Decodeur.BatterieDecodee decodee = Decodeur.decoder(trameDto.octets());
 
         // 2. Construire l'objet Batterie pour la base de données
         Batterie batterie = new Batterie();

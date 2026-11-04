@@ -4,28 +4,26 @@ import java.util.List;
 
 public class Decodeur {
 
-    public static class MesureDecodee {
+    public static class BatterieDecodee {
         public int soc;
         public boolean alarme;
         public float tension;
         public float courant;
         public float temperature;
-        public int idCarte;
-        public long horodatage;
     }
 
-    public static MesureDecodee decoder(List<Integer> trame) {
-        if (trame == null || trame.size() != 10) {
-            throw new IllegalArgumentException("La trame doit contenir exactement 10 octets");
+    public static BatterieDecodee decoder(List<Integer> trame) {
+        if (trame == null || trame.size() != 5) {
+            throw new IllegalArgumentException("La trame doit contenir exactement 5 octets");
         }
 
         // Conversion de la liste en tableau d'octets
-        int[] b = new int[10];
-        for (int i = 0; i < 10; i++) {
+        int[] b = new int[5];
+        for (int i = 0; i < 5; i++) {
             b[i] = trame.get(i) & 0xFF;
         }
 
-        MesureDecodee m = new MesureDecodee();
+        BatterieDecodee m = new BatterieDecodee();
 
         // 1. SOC et Alarme
         m.soc = b[0] >> 1;
@@ -44,12 +42,6 @@ public class Decodeur {
 
         // 4. Température
         m.temperature = (b[4] * 0.5f) - 20.0f;
-
-        // 5. Identifiant Carte
-        m.idCarte = b[5];
-
-        // 6. Horodatage (32 bits)
-        m.horodatage = ((long) b[6] << 24) | ((long) b[7] << 16) | ((long) b[8] << 8) | b[9];
 
         return m;
     }
