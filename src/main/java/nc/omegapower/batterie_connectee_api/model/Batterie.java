@@ -32,11 +32,10 @@ public class Batterie {
     @NotNull
     private Float temperature;
 
-    @NotNull
+    // ⚠️ SUPPRIMÉ @NotNull : l'alarme est calculée par le Service,
+    // donc elle est null au moment de la validation @Valid.
     private Boolean alarme;
 
-    // L'ajout de lenient = OptBoolean.TRUE permet d'accepter le format ISO en entrée
-    // tout en gardant le format d'affichage de Nouméa en sortie.
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss", timezone = "Pacific/Noumea", lenient = OptBoolean.TRUE)
     @Column(name = "date_mesure")
     private OffsetDateTime dateMesure;
