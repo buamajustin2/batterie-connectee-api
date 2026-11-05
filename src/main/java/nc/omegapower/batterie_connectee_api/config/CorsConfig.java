@@ -14,7 +14,7 @@ public class CorsConfig implements WebMvcConfigurer {
                         "https://localhost:7443",
                         "http://localhost:3000",
                         "http://localhost:5173",
-                        
+                        "https://batterie-connectee-api.nc"
                 )
                 .allowedMethods("GET", "POST", "DELETE", "OPTIONS")
                 .allowedHeaders("*")
