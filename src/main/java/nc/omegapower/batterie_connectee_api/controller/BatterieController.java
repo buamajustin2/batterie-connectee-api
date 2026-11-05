@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate; // <-- Import pour LocalDate
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -27,14 +28,12 @@ public class BatterieController {
     // HISTORIQUE
     // ----------------------------------------------------------------
 
-    /** Toutes les mesures (les plus récentes d'abord). */
     @GetMapping
     public List<Batterie> getAllBatteries() {
         log.info("GET /api/batteries");
         return batterieService.getAllBatteries();
     }
 
-    /** Une mesure par son id. */
     @GetMapping("/{id}")
     public ResponseEntity<Batterie> getBatterieById(@PathVariable Long id) {
         Batterie batterie = batterieService.getBatterieById(id);
@@ -44,7 +43,6 @@ public class BatterieController {
         return ResponseEntity.notFound().build();
     }
 
-    /** Toutes les mesures où une alarme s'est déclenchée. */
     @GetMapping("/alarmes")
     public List<Batterie> getAlarmes() {
         log.info("GET /api/batteries/alarmes");
@@ -52,22 +50,26 @@ public class BatterieController {
     }
 
     /**
-     * Historique sur une période.
-     * Exemple : /api/batteries/historique?debut=2026-11-04T00:00:00&fin=2026-11-04T23:59:59
+     * Historique sur une période (Date simple, ex: 2026-11-04)
      */
     @GetMapping("/historique")
     public List<Batterie> getHistorique(
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime debut,
-            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) LocalDateTime fin) {
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate debut,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin) {
+        
         log.info("GET /api/batteries/historique?debut={}&fin={}", debut, fin);
-        return batterieService.getHistorique(debut, fin);
+        
+        // On convertit la date de début (00:00:00) et de fin (23:59:59)
+        LocalDateTime debutTime = debut.atStartOfDay();
+        LocalDateTime finTime = fin.atTime(23, 59, 59);
+        
+        return batterieService.getHistorique(debutTime, finTime);
     }
 
     // ----------------------------------------------------------------
     // ÉCRITURE
     // ----------------------------------------------------------------
 
-    /** Enregistre une nouvelle mesure (calcul alarme automatique). */
     @PostMapping
     public ResponseEntity<Batterie> createBatterie(@Valid @RequestBody Batterie batterie) {
         log.info("POST /api/batteries {}", batterie);
