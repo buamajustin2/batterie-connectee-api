@@ -1,5 +1,6 @@
 package nc.omegapower.batterie_connectee_api.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -33,9 +34,12 @@ public class Batterie {
     @NotNull
     private Boolean alarme;
 
+    // --- LE FORMATAGE DE LA DATE ---
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss", timezone = "Pacific/Noumea")
     @Column(name = "date_mesure")
     private LocalDateTime dateMesure;
 
+    // --- CONSTRUCTEURS ---
     public Batterie() {}
 
     public Batterie(Integer soc, Float tension, Float courant,
@@ -48,7 +52,7 @@ public class Batterie {
         this.dateMesure = dateMesure;
     }
 
-    // GETTERS
+    // --- GETTERS ---
     public Long getId() { return id; }
     public Integer getSoc() { return soc; }
     public Float getTension() { return tension; }
@@ -57,7 +61,7 @@ public class Batterie {
     public Boolean getAlarme() { return alarme; }
     public LocalDateTime getDateMesure() { return dateMesure; }
 
-    // SETTERS
+    // --- SETTERS ---
     public void setId(Long id) { this.id = id; }
     public void setSoc(Integer soc) { this.soc = soc; }
     public void setTension(Float tension) { this.tension = tension; }
