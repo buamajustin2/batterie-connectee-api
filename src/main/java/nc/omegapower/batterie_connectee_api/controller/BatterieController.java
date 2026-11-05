@@ -66,9 +66,8 @@ public class BatterieController {
         return batterieService.getHistorique(debutTime, finTime);
     }
 
-    // ----------------------------------------------------------------
-    // ÉCRITURE
-    // ----------------------------------------------------------------
+
+    // CRUD
 
     @PostMapping
     public ResponseEntity<Batterie> createBatterie(@Valid @RequestBody Batterie batterie) {
