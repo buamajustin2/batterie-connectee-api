@@ -78,16 +78,6 @@ public class BatterieController {
         return ResponseEntity.status(HttpStatus.CREATED).body(newBatterie);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Batterie> updateBatterie(@PathVariable Long id,
-                                                   @Valid @RequestBody Batterie batterie) {
-        Batterie updated = batterieService.updateBatterie(id, batterie);
-        if (updated != null) {
-            return ResponseEntity.ok(updated);
-        }
-        return ResponseEntity.notFound().build();
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteBatterie(@PathVariable Long id) {
         if (batterieService.existsById(id)) {
