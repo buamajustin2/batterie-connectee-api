@@ -1,6 +1,7 @@
 package nc.omegapower.batterie_connectee_api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.OptBoolean;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -34,8 +35,9 @@ public class Batterie {
     @NotNull
     private Boolean alarme;
 
-    // Formatage pour l'affichage JSON (Heure de Nouméa)
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss", timezone = "Pacific/Noumea")
+    // L'ajout de lenient = OptBoolean.TRUE permet d'accepter le format ISO en entrée
+    // tout en gardant le format d'affichage de Nouméa en sortie.
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss", timezone = "Pacific/Noumea", lenient = OptBoolean.TRUE)
     @Column(name = "date_mesure")
     private OffsetDateTime dateMesure;
 
