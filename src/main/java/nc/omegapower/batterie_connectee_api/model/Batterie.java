@@ -1,7 +1,6 @@
 package nc.omegapower.batterie_connectee_api.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.OptBoolean;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -32,11 +31,11 @@ public class Batterie {
     @NotNull
     private Float temperature;
 
-    // ⚠️ SUPPRIMÉ @NotNull : l'alarme est calculée par le Service,
-    // donc elle est null au moment de la validation @Valid.
+    @NotNull
     private Boolean alarme;
 
-    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss", timezone = "Pacific/Noumea", lenient = OptBoolean.TRUE)
+    // Formatage pour l'affichage JSON (Heure de Nouméa)
+    @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss", timezone = "Pacific/Noumea")
     @Column(name = "date_mesure")
     private OffsetDateTime dateMesure;
 
