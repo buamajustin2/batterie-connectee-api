@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 
@@ -16,9 +16,7 @@ public class BatterieService {
 
     private static final Logger log = LoggerFactory.getLogger(BatterieService.class);
 
-    // ================================================================
-    // SEUILS DE LA BATTERIE V16
-    // ================================================================
+    // Seuils de la batterie V16
     private static final float SEUIL_TENSION_MAX = 57.6f;   // V
     private static final float SEUIL_COURANT_MAX = 100.0f;  // A
     private static final float SEUIL_TEMP_MAX    = 55.0f;   // °C
@@ -26,10 +24,6 @@ public class BatterieService {
 
     @Autowired
     private BatterieRepository batterieRepository;
-
-    // ----------------------------------------------------------------
-    // LECTURE
-    // ----------------------------------------------------------------
 
     public List<Batterie> getAllBatteries() {
         log.info("Récupération de toutes les mesures");
@@ -45,18 +39,14 @@ public class BatterieService {
         return batterieRepository.findByAlarmeTrueOrderByDateMesureDesc();
     }
 
-    public List<Batterie> getHistorique(LocalDateTime debut, LocalDateTime fin) {
+    public List<Batterie> getHistorique(OffsetDateTime debut, OffsetDateTime fin) {
         log.info("Récupération de l'historique entre {} et {}", debut, fin);
         return batterieRepository.findByDateMesureBetweenOrderByDateMesureDesc(debut, fin);
     }
 
-    // ----------------------------------------------------------------
-    // ÉCRITURE
-    // ----------------------------------------------------------------
-
     public Batterie createBatterie(Batterie batterie) {
-        // 1. Date serveur (UTC)
-        batterie.setDateMesure(LocalDateTime.now(ZoneOffset.UTC));
+        // 1. Date serveur en UTC (stockage)
+        batterie.setDateMesure(OffsetDateTime.now(ZoneOffset.UTC));
 
         // 2. Calcul de l'alarme
         boolean alarme = false;
@@ -77,8 +67,6 @@ public class BatterieService {
             raison.append(String.format("Surchauffe (%.1f°C > %.1f°C) ", 
                     batterie.getTemperature(), SEUIL_TEMP_MAX));
         }
-        
-        // ATTENTION : Utilisation de getSoc() ici
         if (batterie.getSoc() != null && batterie.getSoc() < SEUIL_SOC_MIN) {
             alarme = true;
             raison.append(String.format("Batterie faible (%d%% < %d%%) ", 
@@ -89,7 +77,7 @@ public class BatterieService {
 
         // 3. Log
         if (alarme) {
-            log.warn(" ALARME V16 : {} (soc={}%, tension={}V, courant={}A, temp={}°C)",
+            log.warn("ALARME V16 : {} (soc={}%, tension={}V, courant={}A, temp={}°C)",
                     raison.toString().trim(),
                     batterie.getSoc(), batterie.getTension(),
                     batterie.getCourant(), batterie.getTemperature());
@@ -108,12 +96,12 @@ public class BatterieService {
         if (batterie == null) {
             return null;
         }
-        batterie.setSoc(batterieDetails.getSoc()); // <-- Changé ici aussi
+        batterie.setSoc(batterieDetails.getSoc());
         batterie.setTension(batterieDetails.getTension());
         batterie.setCourant(batterieDetails.getCourant());
         batterie.setTemperature(batterieDetails.getTemperature());
         batterie.setAlarme(batterieDetails.getAlarme());
-        batterie.setDateMesure(LocalDateTime.now(ZoneOffset.UTC));
+        batterie.setDateMesure(OffsetDateTime.now(ZoneOffset.UTC));
         return batterieRepository.save(batterie);
     }
 

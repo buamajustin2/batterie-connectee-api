@@ -6,7 +6,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 
 @Entity
 @Table(name = "batterie")
@@ -34,16 +34,15 @@ public class Batterie {
     @NotNull
     private Boolean alarme;
 
-    // --- LE FORMATAGE DE LA DATE ---
+    // Formatage pour l'affichage JSON (Heure de Nouméa)
     @JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss", timezone = "Pacific/Noumea")
     @Column(name = "date_mesure")
-    private LocalDateTime dateMesure;
+    private OffsetDateTime dateMesure;
 
-    // --- CONSTRUCTEURS ---
     public Batterie() {}
 
     public Batterie(Integer soc, Float tension, Float courant,
-                    Float temperature, Boolean alarme, LocalDateTime dateMesure) {
+                    Float temperature, Boolean alarme, OffsetDateTime dateMesure) {
         this.soc = soc;
         this.tension = tension;
         this.courant = courant;
@@ -52,21 +51,19 @@ public class Batterie {
         this.dateMesure = dateMesure;
     }
 
-    // --- GETTERS ---
     public Long getId() { return id; }
     public Integer getSoc() { return soc; }
     public Float getTension() { return tension; }
     public Float getCourant() { return courant; }
     public Float getTemperature() { return temperature; }
     public Boolean getAlarme() { return alarme; }
-    public LocalDateTime getDateMesure() { return dateMesure; }
+    public OffsetDateTime getDateMesure() { return dateMesure; }
 
-    // --- SETTERS ---
     public void setId(Long id) { this.id = id; }
     public void setSoc(Integer soc) { this.soc = soc; }
     public void setTension(Float tension) { this.tension = tension; }
     public void setCourant(Float courant) { this.courant = courant; }
     public void setTemperature(Float temperature) { this.temperature = temperature; }
     public void setAlarme(Boolean alarme) { this.alarme = alarme; }
-    public void setDateMesure(LocalDateTime dateMesure) { this.dateMesure = dateMesure; }
+    public void setDateMesure(OffsetDateTime dateMesure) { this.dateMesure = dateMesure; }
 }

@@ -11,8 +11,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDate; // <-- Import pour LocalDate
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @RestController
@@ -25,7 +26,7 @@ public class BatterieController {
     private BatterieService batterieService;
 
     // ----------------------------------------------------------------
-    // HISTORIQUE
+    // LECTURE
     // ----------------------------------------------------------------
 
     @GetMapping
@@ -59,15 +60,16 @@ public class BatterieController {
         
         log.info("GET /api/batteries/historique?debut={}&fin={}", debut, fin);
         
-        // On convertit la date de début (00:00:00) et de fin (23:59:59)
-        LocalDateTime debutTime = debut.atStartOfDay();
-        LocalDateTime finTime = fin.atTime(23, 59, 59);
+        // Conversion en OffsetDateTime (UTC) pour correspondre à la base
+        OffsetDateTime debutTime = debut.atStartOfDay().atOffset(ZoneOffset.UTC);
+        OffsetDateTime finTime = fin.atTime(23, 59, 59).atOffset(ZoneOffset.UTC);
         
         return batterieService.getHistorique(debutTime, finTime);
     }
 
-
-    // CRUD
+    // ----------------------------------------------------------------
+    // ÉCRITURE
+    // ----------------------------------------------------------------
 
     @PostMapping
     public ResponseEntity<Batterie> createBatterie(@Valid @RequestBody Batterie batterie) {
