@@ -10,10 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile; // <-- NOUVEAU
 
-/**
- * Connecteur HTTP secondaire (8080) avec redirection effective vers HTTPS (8443).
- * Désactivé en production (profil 'prod').
- */
+
 @Configuration
 @Profile("!prod") // <-- NOUVEAU : Ne s'active pas si le profil "prod" est actif
 public class HttpsConfig {
